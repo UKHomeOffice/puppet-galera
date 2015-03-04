@@ -39,7 +39,6 @@
 #  Defaults to -1
 #
 class galera::status (
-  $status_password  = 'statuscheck!',
   $status_allow     = '%',
   $status_host      = 'localhost',
   $status_user      = 'clustercheck',
@@ -47,6 +46,9 @@ class galera::status (
   $available_when_donor    = 0,
   $available_when_readonly = -1,
 ) {
+  # Hack to allow encrypted password...
+  include ::galera
+  $status_password = $::galera::status_password
 
   mysql_user { "${status_user}@${status_allow}":
     ensure          => 'present',
